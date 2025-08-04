@@ -79,12 +79,13 @@ public class EmployeeController {
 
     /**
      * 新增员工
+     *
      * @param employeeDTO
      * @return
      */
     @PostMapping
     @ApiOperation(value = "新增员工")
-    public Result<String> save(@RequestBody EmployeeDTO employeeDTO){
+    public Result<String> save(@RequestBody EmployeeDTO employeeDTO) {
         log.info("新增员工，员工数据：{}", employeeDTO);
         return employeeService.save(employeeDTO);
     }

@@ -18,26 +18,28 @@ public class GlobalExceptionHandler {
 
     /**
      * 捕获业务异常
+     *
      * @param ex
      * @return
      */
     @ExceptionHandler
-    public Result exceptionHandler(BaseException ex){
+    public Result exceptionHandler(BaseException ex) {
         log.error("异常信息：{}", ex.getMessage());
         return Result.error(ex.getMessage());
     }
 
     /**
      * 捕获SQL异常
+     *
      * @param ex
      * @return
      */
     @ExceptionHandler
-    public Result exceptionHandler(SQLIntegrityConstraintViolationException ex){
+    public Result exceptionHandler(SQLIntegrityConstraintViolationException ex) {
         String msg = ex.getMessage();
-        if (msg.contains("Duplicate entry")){
+        if (msg.contains("Duplicate entry")) {
             String[] split = msg.split(" ");
-            String username = split[2].substring(0, split[2].length()-1);
+            String username = split[2].substring(0, split[2].length() - 1);
             return Result.error(username + MessageConstant.ALREADY_EXIST);
         }
         return Result.error(MessageConstant.UNKNOWN_ERROR);
