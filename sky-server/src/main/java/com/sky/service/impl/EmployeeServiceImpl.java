@@ -76,10 +76,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO, employee);
         employee.setStatus(StatusConstant.ENABLE);
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
         employeeMapper.insert(employee);
         return Result.success();
@@ -132,6 +128,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         return Result.success(employeeDTO);
     }
 
+    /**
+     * 修改员工信息
+     *
+     * @param employeeDTO
+     * @return
+     */
     @Override
     public Result update(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
