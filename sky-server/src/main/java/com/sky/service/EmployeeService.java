@@ -41,4 +41,12 @@ public interface EmployeeService {
      * @return
      */
     Result empStatus(Integer status, Long id);
+
+    /**
+     * 根据id查询员工信息
+     *
+     * @param id
+     * @return
+     */
+    Result<EmployeeDTO> getById(Long id);
 }

@@ -113,4 +113,16 @@ public class EmployeeController {
     public Result empStatus(@PathVariable Integer status, Long id) {
         return employeeService.empStatus(status, id);
     }
+
+    /**
+     * 根据id查询员工
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation(value = "根据id查询员工")
+    public Result<EmployeeDTO> getById(@PathVariable Long id) {
+        return employeeService.getById(id);
+    }
 }
