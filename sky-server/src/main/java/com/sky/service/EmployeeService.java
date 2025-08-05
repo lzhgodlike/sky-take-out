@@ -49,4 +49,6 @@ public interface EmployeeService {
      * @return
      */
     Result<EmployeeDTO> getById(Long id);
+
+    Result update(EmployeeDTO employeeDTO);
 }

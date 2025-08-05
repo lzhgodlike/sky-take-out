@@ -131,4 +131,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         BeanUtils.copyProperties(emp, employeeDTO);
         return Result.success(employeeDTO);
     }
+
+    @Override
+    public Result update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employeeMapper.update(employee);
+        return Result.success();
+    }
 }

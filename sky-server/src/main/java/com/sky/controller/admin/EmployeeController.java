@@ -125,4 +125,10 @@ public class EmployeeController {
     public Result<EmployeeDTO> getById(@PathVariable Long id) {
         return employeeService.getById(id);
     }
+
+    @PutMapping
+    @ApiOperation(value = "编辑员工信息")
+    public Result update(@RequestBody EmployeeDTO employeeDTO) {
+        return employeeService.update(employeeDTO);
+    }
 }
