@@ -6,6 +6,8 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.vo.DishVO;
 
+import java.util.List;
+
 public interface DishService {
     Result save(DishDTO dishDTO);
 
@@ -14,4 +16,6 @@ public interface DishService {
     Result update(DishDTO dishDTO);
 
     Result<DishVO> getById(Long id);
+
+    Result<List<DishDTO>> list(Long categoryId);
 }

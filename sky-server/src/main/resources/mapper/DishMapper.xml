@@ -22,17 +22,28 @@
 
     <select id="pageQuery" resultType="com.sky.vo.DishVO">
         select d.id,
-               d.name,
-               d.category_id,
-               d.price,
-               d.image,
-               d.description,
-               d.status,
-               d.update_time,
-               d.create_time,
-               d.create_user,
-               d.update_user
+        d.name,
+        d.category_id,
+        d.price,
+        d.image,
+        d.description,
+        d.status,
+        d.update_time,
+        d.create_time,
+        d.create_user,
+        d.update_user
         from dish d
+        <where>
+            <if test="name != null and name != ''">
+                and name like '%${name}%'
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
     </select>
 
     <update id="update">
@@ -93,5 +104,20 @@
                value
         from dish_flavor
         where dish_id = #{id}
+    </select>
+    <select id="list" resultType="com.sky.dto.DishDTO">
+        select id,
+               name,
+               category_id,
+               price,
+               image,
+               description,
+               status,
+               update_time,
+               create_time,
+               create_user,
+               update_user
+        from dish
+        where category_id = #{categoryId}
     </select>
 </mapper>

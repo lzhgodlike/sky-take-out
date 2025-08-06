@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.sky.result.Result;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin/dish")
 public class DishController {
@@ -62,5 +64,17 @@ public class DishController {
     @ApiOperation("根据id查询菜品")
     public Result<DishVO> getById(@PathVariable Long id) {
         return dishService.getById(id);
+    }
+
+    /**
+     * 根据分类id查询菜品
+     *
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("根据分类id查询菜品")
+    public Result<List<DishDTO>> list(Long categoryId) {
+        return dishService.list(categoryId);
     }
 }
