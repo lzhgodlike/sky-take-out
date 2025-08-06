@@ -86,4 +86,11 @@ public interface DishMapper {
      * @return
      */
     List<DishDTO> list(Long categoryId);
+
+    /**
+     * 批量删除菜品
+     *
+     * @param ids
+     */
+    void delete(List<Long> ids);
 }

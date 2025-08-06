@@ -116,4 +116,16 @@ public class DishServiceImpl implements DishService {
         dishMapper.update(dishDTO);
         return Result.success();
     }
+
+    /**
+     * 批量删除菜品
+     *
+     * @param ids
+     * @return
+     */
+    @Override
+    public Result delete(List<Long> ids) {
+        dishMapper.delete(ids);
+        return Result.success();
+    }
 }

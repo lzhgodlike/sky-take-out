@@ -20,4 +20,6 @@ public interface DishService {
     Result<List<DishDTO>> list(Long categoryId);
 
     Result dishStatus(Integer status, Long id);
+
+    Result delete(List<Long> ids);
 }

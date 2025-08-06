@@ -90,4 +90,16 @@ public class DishController {
     public Result dishStatus(@PathVariable Integer status, Long id) {
         return dishService.dishStatus(status, id);
     }
+
+    /**
+     * 批量删除菜品
+     *
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    @ApiOperation("批量删除菜品")
+    public Result delete(@RequestParam List<Long> ids) {
+        return dishService.delete(ids);
+    }
 }
