@@ -34,4 +34,64 @@
                d.update_user
         from dish d
     </select>
+
+    <update id="update">
+        update dish
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="image != null">
+                image = #{image},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFlavors">
+        delete
+        from dish_flavor
+        where dish_id = #{id}
+    </delete>
+    <select id="getById" resultType="com.sky.vo.DishVO">
+        select d.id,
+               d.name,
+               d.category_id,
+               d.price,
+               d.image,
+               d.description,
+               d.status,
+               d.update_time,
+               d.create_time,
+               d.create_user,
+               d.update_user
+        from dish d
+        where id = #{id}
+    </select>
+    <select id="getFlavorsByDishId" resultType="com.sky.entity.DishFlavor">
+        select id,
+               dish_id,
+               name,
+               value
+        from dish_flavor
+        where dish_id = #{id}
+    </select>
 </mapper>

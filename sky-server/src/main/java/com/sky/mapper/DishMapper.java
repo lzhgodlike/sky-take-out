@@ -41,5 +41,41 @@ public interface DishMapper {
      */
     void saveFlavors(@Param("dishId") Long dishId, @Param("flavors") List<DishFlavor> flavors);
 
+    /**
+     * 菜品分页查询
+     *
+     * @param dishPageQueryDTO
+     */
     List<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
+
+    /**
+     * 更新菜品
+     *
+     * @param dishDTO
+     */
+    @AutoFill(value = OperationType.UPDATE)
+    void update(DishDTO dishDTO);
+
+    /**
+     * 批量更新菜品口味
+     *
+     * @param id
+     */
+    void deleteFlavors(Long id);
+
+    /**
+     * 根据id查询菜品数据
+     *
+     * @param id
+     * @return
+     */
+    DishVO getById(Long id);
+
+    /**
+     * 根据菜品id查询菜品口味数据
+     *
+     * @param id
+     * @return
+     */
+    List<DishFlavor> getFlavorsByDishId(Long id);
 }
