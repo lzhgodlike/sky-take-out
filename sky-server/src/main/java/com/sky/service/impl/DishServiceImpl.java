@@ -1,10 +1,15 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.DishFlavor;
 import com.sky.mapper.DishMapper;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,5 +31,13 @@ public class DishServiceImpl implements DishService {
             dishMapper.saveFlavors(dishDTO.getId(), flavors);
         }
         return Result.success();
+    }
+
+    @Override
+    public Result<PageResult> page(DishPageQueryDTO dishPageQueryDTO) {
+        PageHelper.startPage(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
+        Page<DishVO> dishVOPage = (Page<DishVO>) dishMapper.pageQuery(dishPageQueryDTO);
+        PageResult pageResult = new PageResult(dishVOPage.getTotal(), dishVOPage.getResult());
+        return Result.success(pageResult);
     }
 }

@@ -20,4 +20,18 @@
         </foreach>
     </insert>
 
+    <select id="pageQuery" resultType="com.sky.vo.DishVO">
+        select d.id,
+               d.name,
+               d.category_id,
+               d.price,
+               d.image,
+               d.description,
+               d.status,
+               d.update_time,
+               d.create_time,
+               d.create_user,
+               d.update_user
+        from dish d
+    </select>
 </mapper>
