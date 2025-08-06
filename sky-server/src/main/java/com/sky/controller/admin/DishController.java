@@ -77,4 +77,17 @@ public class DishController {
     public Result<List<DishDTO>> list(Long categoryId) {
         return dishService.list(categoryId);
     }
+
+    /**
+     * 起售、停售菜品
+     *
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("起售、停售菜品")
+    public Result dishStatus(@PathVariable Integer status, Long id) {
+        return dishService.dishStatus(status, id);
+    }
 }

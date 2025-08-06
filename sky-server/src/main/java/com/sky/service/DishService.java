@@ -18,4 +18,6 @@ public interface DishService {
     Result<DishVO> getById(Long id);
 
     Result<List<DishDTO>> list(Long categoryId);
+
+    Result dishStatus(Integer status, Long id);
 }

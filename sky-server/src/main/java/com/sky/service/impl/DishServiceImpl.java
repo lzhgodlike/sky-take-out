@@ -100,4 +100,20 @@ public class DishServiceImpl implements DishService {
         List<DishDTO> list = dishMapper.list(categoryId);
         return Result.success(list);
     }
+
+    /**
+     * 菜品起售、停售
+     *
+     * @param status
+     * @param id
+     * @return
+     */
+    @Override
+    public Result dishStatus(Integer status, Long id) {
+        DishDTO dishDTO = new DishDTO();
+        dishDTO.setStatus(status);
+        dishDTO.setId(id);
+        dishMapper.update(dishDTO);
+        return Result.success();
+    }
 }
