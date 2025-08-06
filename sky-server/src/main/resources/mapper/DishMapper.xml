@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.DishMapper">
+
+    <!-- 新增菜品数据 -->
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into dish(name, category_id, price, status, image, description, create_time, update_time, create_user,
+                         update_user)
+        values (#{name}, #{categoryId}, #{price}, #{status}, #{image}, #{description}, #{createTime}, #{updateTime},
+                #{createUser}, #{updateUser})
+    </insert>
+
+    <!-- 批量保存菜品口味数据 -->
+    <insert id="saveFlavors">
+        insert into dish_flavor(dish_id, name, value)
+        values
+        <foreach collection="flavors" item="flavor" separator=",">
+            (#{dishId}, #{flavor.name}, #{flavor.value})
+        </foreach>
+    </insert>
+
+</mapper>

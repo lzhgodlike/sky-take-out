@@ -1,0 +1,30 @@
+package com.sky.service.impl;
+
+import com.sky.dto.DishDTO;
+import com.sky.entity.DishFlavor;
+import com.sky.mapper.DishMapper;
+import com.sky.result.Result;
+import com.sky.service.DishService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+public class DishServiceImpl implements DishService {
+    @Autowired
+    private DishMapper dishMapper;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Result save(DishDTO dishDTO) {
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        dishMapper.save(dishDTO);
+        // 只有当 flavors 不为空时才调用 saveFlavors
+        if (flavors != null && !flavors.isEmpty()) {
+            dishMapper.saveFlavors(dishDTO.getId(), flavors);
+        }
+        return Result.success();
+    }
+}
