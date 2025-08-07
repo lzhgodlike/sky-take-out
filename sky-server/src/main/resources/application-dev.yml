@@ -6,8 +6,15 @@ sky:
     database: sky_take_out
     username: root
     password: 123456
+
   alioss:
     endpoint: oss-cn-qingdao.aliyuncs.com
     bucket-name: lzhgod
     access-key-id: ${OSS_ACCESS_KEY_ID}
-    access-key-secret: ${OSS_ACCESS_KEY_SECRET} 
+    access-key-secret: ${OSS_ACCESS_KEY_SECRET}
+
+  redis:
+    host: localhost
+    port: 6379
+    #    password: 123456
+    database: 0
