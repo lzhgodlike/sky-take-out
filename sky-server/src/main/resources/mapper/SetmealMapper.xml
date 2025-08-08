@@ -17,4 +17,88 @@
             </if>
         </where>
     </select>
+    <insert id="save">
+        insert into setmeal (name, category_id, price, status,
+                             create_time, update_time, create_user, update_user, image)
+        values (#{name}, #{categoryId}, #{price}, #{status},
+                #{createTime}, #{updateTime}, #{createUser}, #{updateUser}, #{image})
+    </insert>
+    <insert id="saveSetmealDishes">
+        insert into setmeal_dish (setmeal_id, dish_id, name,
+        price, copies)
+        values
+        <foreach collection="setmealDishes" item="setmealDish" separator=",">
+            (#{id}, #{setmealDish.dishId}, #{setmealDish.name},
+            #{setmealDish.price},
+            #{setmealDish.copies})
+        </foreach>
+    </insert>
+    <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
+        select s.id, s.name, s.price, s.status, s.category_id,
+        c.name as categoryName, s.update_time, s.image
+        from setmeal s
+        left join category c on s.category_id = c.id
+        <where>
+            <if test="categoryId != null">
+                and s.category_id = #{categoryId}
+            </if>
+            <if test="name != null">
+                and s.name like concat('%',#{name},'%')
+            </if>
+            <if test="status != null">
+                and s.status = #{status}
+            </if>
+        </where>
+    </select>
+    <select id="getById" resultType="com.sky.vo.SetmealVO">
+        select *
+        from setmeal
+        where id = #{id}
+    </select>
+    <select id="getDishesById" resultType="com.sky.entity.SetmealDish">
+        select *
+        from setmeal_dish
+        where setmeal_id = #{id}
+    </select>
+    <update id="update">
+        update setmeal
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="image != null">
+                image = #{image},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="deleteSetmealDishes">
+        delete from setmeal_dish
+        where setmeal_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="delete">
+        delete from setmeal
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>
