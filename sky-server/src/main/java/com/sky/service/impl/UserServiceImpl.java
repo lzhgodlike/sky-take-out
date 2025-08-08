@@ -35,14 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserLoginVO login(UserLoginDTO userLoginDTO) {
-        Map<String, String> map = new HashMap<>();
-        map.put("appid", weChatProperties.getAppid());
-        map.put("secret", weChatProperties.getSecret());
-        map.put("js_code", userLoginDTO.getCode());
-        map.put("grant_type", "authorization_code");
-        String json = HttpClientUtil.doGet(WX_LOGIN, map);
-        JSONObject object = JSON.parseObject(json);
-        String openid = object.getString("openid");
+        String openid = getOpenId(userLoginDTO.getCode());
         if (openid == null) {
             throw new LoginFailedException(MessageConstant.LOGIN_FAILED);
         }
@@ -70,5 +63,17 @@ public class UserServiceImpl implements UserService {
                 claims);
         user.setToken(token);
         return user;
+    }
+
+    private String getOpenId(String code) {
+        Map<String, String> map = new HashMap<>();
+        map.put("appid", weChatProperties.getAppid());
+        map.put("secret", weChatProperties.getSecret());
+        map.put("js_code", code);
+        map.put("grant_type", "authorization_code");
+        String json = HttpClientUtil.doGet(WX_LOGIN, map);
+        JSONObject object = JSON.parseObject(json);
+        String openid = object.getString("openid");
+        return openid;
     }
 }

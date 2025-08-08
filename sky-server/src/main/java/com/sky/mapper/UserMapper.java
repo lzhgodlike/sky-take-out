@@ -12,5 +12,5 @@ public interface UserMapper {
 
     UserLoginVO select(UserLoginDTO userLoginDTO);
 
-    void insert(User user);
+    Integer insert(User user);
 }

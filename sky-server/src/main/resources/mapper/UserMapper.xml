@@ -7,7 +7,7 @@
         from user
         where openid = #{code}
     </select>
-    <insert id="insert">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         insert into user (openid, create_time)
         values (#{openid}, #{createTime})
     </insert>

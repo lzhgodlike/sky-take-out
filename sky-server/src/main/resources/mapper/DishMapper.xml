@@ -105,7 +105,7 @@
         from dish_flavor
         where dish_id = #{id}
     </select>
-    <select id="list" resultType="com.sky.dto.DishDTO">
+    <select id="list" resultType="com.sky.entity.Dish">
         select id,
                name,
                category_id,

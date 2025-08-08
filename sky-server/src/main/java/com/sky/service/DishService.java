@@ -2,6 +2,7 @@ package com.sky.service;
 
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.vo.DishVO;
@@ -17,9 +18,11 @@ public interface DishService {
 
     Result<DishVO> getById(Long id);
 
-    Result<List<DishDTO>> list(Long categoryId);
+    Result<List<Dish>> list(Long categoryId);
 
     Result dishStatus(Integer status, Long id);
 
     Result delete(List<Long> ids);
+
+    List<DishVO> listWithFlavor(Dish dish);
 }
