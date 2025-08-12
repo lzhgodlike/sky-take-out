@@ -94,4 +94,6 @@ public interface DishMapper {
      * @param ids
      */
     void delete(List<Long> ids);
+
+    List<DishVO> getByIds(List<Long> ids);
 }

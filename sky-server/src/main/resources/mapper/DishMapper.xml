@@ -31,8 +31,9 @@
         d.update_time,
         d.create_time,
         d.create_user,
-        d.update_user
-        from dish d
+        d.update_user,
+        c.name as categoryName
+        from dish d left join category c on d.category_id = c.id
         <where>
             <if test="name != null and name != ''">
                 and name like '%${name}%'
@@ -119,6 +120,7 @@
                update_user
         from dish
         where category_id = #{categoryId}
+          and status = 1
     </select>
 
     <delete id="delete">
@@ -129,4 +131,23 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="getByIds" resultType="com.sky.vo.DishVO">
+        select id,
+        name,
+        category_id,
+        price,
+        image,
+        description,
+        status,
+        update_time,
+        create_time,
+        create_user,
+        update_user
+        from dish
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

@@ -9,6 +9,7 @@ import com.sky.enumeration.OperationType;
 import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public interface SetmealMapper {
     @AutoFill(value = OperationType.INSERT)
     void save(Setmeal setmeal);
 
-    void saveSetmealDishes(Long id, List<SetmealDish> setmealDishes);
+    void saveSetmealDishes(@Param("setmealId") Long id, @Param("setmealDishes") List<SetmealDish> setmealDishes);
 
     List<SetmealVO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
