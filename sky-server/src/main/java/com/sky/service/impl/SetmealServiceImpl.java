@@ -17,7 +17,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +32,6 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Autowired
     private SetmealMapper setmealMapper;
-    @Autowired
-    private RedisTemplate redisTemplate;
 
     /**
      * 条件查询
@@ -66,17 +63,15 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Result save(SetmealDTO setmealDTO) {
-        String key = "setmeal_list_" + setmealDTO.getCategoryId();
         List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
         Setmeal setmeal = new Setmeal();
         BeanUtils.copyProperties(setmealDTO, setmeal);
         setmealMapper.save(setmeal);
         // 只有当 setmealDishes 不为空时才调用 saveSetmealDishes
         if (setmealDishes != null && !setmealDishes.isEmpty()) {
-            System.out.println("id:" + setmealDTO.getId());
+            setmealDishes.forEach(dish -> dish.setSetmealId(setmeal.getId()));
             setmealMapper.saveSetmealDishes(setmeal.getId(), setmealDishes);
         }
-        redisTemplate.delete(key);
         return Result.success();
     }
 
@@ -103,20 +98,11 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Result update(SetmealDTO setmealDTO) {
-        String key = "setmeal_list_" + setmealDTO.getCategoryId();
-        SetmealVO setmealVO = setmealMapper.getById(setmealDTO.getId());
-        if (setmealVO != null && !setmealVO.getCategoryId().equals(setmealDTO.getCategoryId())) {
-            log.info("修改套餐分类，清理缓存数据：" + key);
-            redisTemplate.delete(key);
-            key = "setmeal_list_" + setmealVO.getCategoryId();
-        }
         Setmeal setmeal = new Setmeal();
         BeanUtils.copyProperties(setmealDTO, setmeal);
         setmealMapper.update(setmeal);
         setmealMapper.deleteSetmealDishes(Collections.singletonList(setmealDTO.getId()));
-        setmealMapper.saveSetmealDishes(setmealDTO.getId(), setmealDTO.getSetmealDishes());
-        log.info("修改套餐信息，清理缓存数据：" + key);
-        redisTemplate.delete(key);
+        setmealMapper.saveSetmealDishes(setmeal.getId(), setmealDTO.getSetmealDishes());
         return Result.success();
     }
 
@@ -143,13 +129,9 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public Result setmealStatus(Integer status, Long id) {
         Setmeal setmeal = new Setmeal();
-        SetmealVO setmealVO = setmealMapper.getById(id);
         setmeal.setId(id);
         setmeal.setStatus(status);
         setmealMapper.update(setmeal);
-        String key = "setmeal_list_" + setmealVO.getCategoryId();
-        log.info("删除缓存key:{}", key);
-        redisTemplate.delete(key);
         return Result.success();
     }
 
@@ -162,19 +144,8 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Result delete(List<Long> ids) {
-        List<Long> categoryIds = null;
-        for (Long id : ids) {
-            SetmealVO setmealVO = setmealMapper.getById(id);
-            // 把套餐的分类id保存起来,等待所有套餐删除完毕再删除缓存
-            categoryIds = Collections.singletonList(setmealVO.getCategoryId());
-        }
-        setmealMapper.deleteSetmealDishes(ids);
         setmealMapper.delete(ids);
-        for (Long categoryId : categoryIds) {
-            String key = "setmeal_list_" + categoryId;
-            log.info("删除缓存key:{}", key);
-            redisTemplate.delete(key);
-        }
+        setmealMapper.deleteSetmealDishes(ids);
         return Result.success();
     }
 }

@@ -48,7 +48,7 @@ public interface SetmealMapper {
     @AutoFill(value = OperationType.INSERT)
     void save(Setmeal setmeal);
 
-    void saveSetmealDishes(@Param("setmealId") Long id, @Param("setmealDishes") List<SetmealDish> setmealDishes);
+    void saveSetmealDishes(Long id, List<SetmealDish> setmealDishes);
 
     List<SetmealVO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 

@@ -8,6 +8,7 @@ import com.sky.vo.DishItemVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +23,6 @@ import java.util.List;
 public class SetmealController {
     @Autowired
     private SetmealService setmealService;
-    @Autowired
-    private RedisTemplate redisTemplate;
 
     /**
      * 条件查询
@@ -31,20 +30,15 @@ public class SetmealController {
      * @param categoryId
      * @return
      */
+    @Cacheable(cacheNames = "setmealCache", key = "#categoryId")
     @GetMapping("/list")
     @ApiOperation("根据分类id查询套餐")
     public Result<List<Setmeal>> list(Long categoryId) {
-        String key = "setmeal_list_" + categoryId;
-        List<Setmeal> list = (List<Setmeal>) redisTemplate.opsForValue().get(key);
-        if (list != null && list.size() > 0) {
-            return Result.success(list);
-        }
         Setmeal setmeal = new Setmeal();
         setmeal.setCategoryId(categoryId);
         setmeal.setStatus(StatusConstant.ENABLE);
 
-        list = setmealService.list(setmeal);
-        redisTemplate.opsForValue().set(key, list);
+        List<Setmeal> list = setmealService.list(setmeal);
         return Result.success(list);
     }
 
@@ -54,6 +48,7 @@ public class SetmealController {
      * @param id
      * @return
      */
+    @Cacheable(cacheNames = "setmealDishCache", key = "#id")
     @GetMapping("/dish/{id}")
     @ApiOperation("根据套餐id查询包含的菜品列表")
     public Result<List<DishItemVO>> dishList(@PathVariable("id") Long id) {
