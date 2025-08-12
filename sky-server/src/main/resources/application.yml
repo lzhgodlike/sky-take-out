@@ -4,6 +4,7 @@ server:
 spring:
   profiles:
     active: dev
+    include: secrets
   main:
     allow-circular-references: true
   datasource:

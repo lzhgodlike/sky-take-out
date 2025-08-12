@@ -10,4 +10,8 @@ public interface CartService {
     List<ShoppingCart> list();
 
     Result add(ShoppingCartDTO shoppingCartDTO);
+
+    Result sub(ShoppingCartDTO shoppingCartDTO);
+
+    Result clean();
 }

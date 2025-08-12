@@ -91,4 +91,27 @@ public class CartServiceImpl implements CartService {
         }
         return Result.error("添加失败");
     }
+
+    @Override
+    public Result sub(ShoppingCartDTO shoppingCartDTO) {
+        log.info("删除购物车：{}", shoppingCartDTO);
+        Long userId = BaseContext.getCurrentId();
+        ShoppingCart shoppingCart = cartMapper.select(shoppingCartDTO, userId);
+        if (shoppingCart.getNumber() == 1) {
+            cartMapper.delete(shoppingCart.getId());
+        } else {
+            ShoppingCart cart = new ShoppingCart();
+            cart.setNumber(shoppingCart.getNumber() - 1);
+            cart.setId(shoppingCart.getId());
+            cartMapper.update(cart);
+        }
+        return Result.success();
+    }
+
+    @Override
+    public Result clean() {
+        log.info("清空购物车");
+        cartMapper.clean(BaseContext.getCurrentId());
+        return Result.success();
+    }
 }
