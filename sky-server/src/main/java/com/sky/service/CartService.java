@@ -9,9 +9,9 @@ import java.util.List;
 public interface CartService {
     List<ShoppingCart> list();
 
-    Result add(ShoppingCartDTO shoppingCartDTO);
+    Result add(ShoppingCart shoppingCart);
 
-    Result sub(ShoppingCartDTO shoppingCartDTO);
+    Result sub(ShoppingCart shoppingCart);
 
     Result clean();
 }

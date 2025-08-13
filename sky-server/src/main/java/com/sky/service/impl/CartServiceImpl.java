@@ -36,26 +36,27 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Result add(ShoppingCartDTO shoppingCartDTO) {
-        log.info("添加购物车：{}", shoppingCartDTO);
+    public Result add(ShoppingCart shoppingCart) {
+        log.info("添加购物车：{}", shoppingCart);
         Long userId = BaseContext.getCurrentId();
-        if (shoppingCartDTO.getDishId() != null) {
+        if (shoppingCart.getDishId() != null) {
             // 获取菜品的信息，然后添加进cart
-            ShoppingCart shoppingCart = cartMapper.select(shoppingCartDTO, userId);
-            if (shoppingCart == null) {
-                Result<DishVO> dishVOResult = dishService.getById(shoppingCartDTO.getDishId());
+            shoppingCart.setUserId(userId);
+            ShoppingCart shoppingCart1 = cartMapper.select(shoppingCart);
+            if (shoppingCart1 == null) {
+                Result<DishVO> dishVOResult = dishService.getById(shoppingCart.getDishId());
                 ShoppingCart cart = ShoppingCart.builder()
                         // 获取当前用户id
                         .userId(userId)
-                        .dishId(shoppingCartDTO.getDishId())
+                        .dishId(shoppingCart.getDishId())
                         .number(1)
                         .amount(dishVOResult.getData().getPrice())
                         .image(dishVOResult.getData().getImage())
                         .name(dishVOResult.getData().getName())
                         .createTime(LocalDateTime.now())
                         .build();
-                if (shoppingCartDTO.getDishFlavor() != null)
-                    cart.setDishFlavor(shoppingCartDTO.getDishFlavor());
+                if (shoppingCart.getDishFlavor() != null)
+                    cart.setDishFlavor(shoppingCart.getDishFlavor());
                 cartMapper.add(cart);
                 return Result.success();
             } else {
@@ -65,14 +66,15 @@ public class CartServiceImpl implements CartService {
                 cartMapper.update(cart);
                 return Result.success();
             }
-        } else if (shoppingCartDTO.getSetmealId() != null) {
+        } else if (shoppingCart.getSetmealId() != null) {
             // 获取套餐的信息，然后添加进cart
-            ShoppingCart shoppingCart = cartMapper.select(shoppingCartDTO, userId);
-            if (shoppingCart == null) {
-                SetmealVO setmealVO = setmealService.getById(shoppingCartDTO.getSetmealId()).getData();
+            shoppingCart.setUserId(userId);
+            ShoppingCart shoppingCart1 = cartMapper.select(shoppingCart);
+            if (shoppingCart1 == null) {
+                SetmealVO setmealVO = setmealService.getById(shoppingCart.getSetmealId()).getData();
                 ShoppingCart cart = ShoppingCart.builder()
                         .userId(userId)
-                        .setmealId(shoppingCartDTO.getSetmealId())
+                        .setmealId(shoppingCart.getSetmealId())
                         .number(1)
                         .amount(setmealVO.getPrice())
                         .image(setmealVO.getImage())
@@ -93,16 +95,17 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Result sub(ShoppingCartDTO shoppingCartDTO) {
-        log.info("删除购物车：{}", shoppingCartDTO);
+    public Result sub(ShoppingCart shoppingCart) {
+        log.info("删除购物车：{}", shoppingCart);
         Long userId = BaseContext.getCurrentId();
-        ShoppingCart shoppingCart = cartMapper.select(shoppingCartDTO, userId);
-        if (shoppingCart.getNumber() == 1) {
-            cartMapper.delete(shoppingCart.getId());
+        shoppingCart.setUserId(userId);
+        ShoppingCart cart1 = cartMapper.select(shoppingCart);
+        if (cart1.getNumber() == 1) {
+            cartMapper.delete(cart1.getId());
         } else {
             ShoppingCart cart = new ShoppingCart();
-            cart.setNumber(shoppingCart.getNumber() - 1);
-            cart.setId(shoppingCart.getId());
+            cart.setNumber(cart1.getNumber() - 1);
+            cart.setId(cart1.getId());
             cartMapper.update(cart);
         }
         return Result.success();

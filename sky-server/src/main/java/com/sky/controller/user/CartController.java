@@ -23,14 +23,14 @@ public class CartController {
     }
 
     @PostMapping("add")
-    public Result add(@RequestBody ShoppingCartDTO shoppingCartDTO) {
-        log.info("添加购物车：{}", shoppingCartDTO);
-        return cartService.add(shoppingCartDTO);
+    public Result add(@RequestBody ShoppingCart shoppingCart) {
+        log.info("添加购物车：{}", shoppingCart);
+        return cartService.add(shoppingCart);
     }
 
     @PostMapping("sub")
-    public Result sub(@RequestBody ShoppingCartDTO shoppingCartDTO) {
-        return cartService.sub(shoppingCartDTO);
+    public Result sub(@RequestBody ShoppingCart shoppingCart) {
+        return cartService.sub(shoppingCart);
     }
 
     @DeleteMapping("clean")

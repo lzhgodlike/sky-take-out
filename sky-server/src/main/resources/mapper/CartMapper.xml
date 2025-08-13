@@ -46,14 +46,14 @@
             <if test="userId != null">
                 user_id = #{userId}
             </if>
-            <if test="shoppingCartDTO.dishId != null">
-                and dish_id = #{shoppingCartDTO.dishId}
+            <if test="dishId != null">
+                and dish_id = #{dishId}
             </if>
-            <if test="shoppingCartDTO.setmealId != null">
-                and setmeal_id = #{shoppingCartDTO.setmealId}
+            <if test="setmealId != null">
+                and setmeal_id = #{setmealId}
             </if>
-            <if test="shoppingCartDTO.dishFlavor != null">
-                and dish_flavor = #{shoppingCartDTO.dishFlavor}
+            <if test="dishFlavor != null">
+                and dish_flavor = #{dishFlavor}
             </if>
         </where>
     </select>

@@ -17,9 +17,9 @@ public interface CartMapper {
 
     void add(ShoppingCart cart);
 
-    ShoppingCart select(ShoppingCartDTO shoppingCartDTO, Long userId);
+    ShoppingCart select(ShoppingCart shoppingCart);
 
-    void update(ShoppingCart cart);
+    void update(ShoppingCart shoppingCart);
 
     @Delete("delete from shopping_cart where id = #{id}")
     void delete(Long id);
