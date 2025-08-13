@@ -44,6 +44,7 @@ public class CartServiceImpl implements CartService {
             shoppingCart.setUserId(userId);
             ShoppingCart shoppingCart1 = cartMapper.select(shoppingCart);
             if (shoppingCart1 == null) {
+                log.info("购物车不存在该菜品");
                 Result<DishVO> dishVOResult = dishService.getById(shoppingCart.getDishId());
                 ShoppingCart cart = ShoppingCart.builder()
                         // 获取当前用户id
@@ -60,9 +61,10 @@ public class CartServiceImpl implements CartService {
                 cartMapper.add(cart);
                 return Result.success();
             } else {
+                log.info("购物车已存在该菜品{}", shoppingCart1);
                 ShoppingCart cart = new ShoppingCart();
-                cart.setNumber(shoppingCart.getNumber() + 1);
-                cart.setId(shoppingCart.getId());
+                cart.setNumber(shoppingCart1.getNumber() + 1);
+                cart.setId(shoppingCart1.getId());
                 cartMapper.update(cart);
                 return Result.success();
             }
@@ -85,8 +87,8 @@ public class CartServiceImpl implements CartService {
                 return Result.success();
             } else {
                 ShoppingCart cart = new ShoppingCart();
-                cart.setNumber(shoppingCart.getNumber() + 1);
-                cart.setId(shoppingCart.getId());
+                cart.setNumber(shoppingCart1.getNumber() + 1);
+                cart.setId(shoppingCart1.getId());
                 cartMapper.update(cart);
                 return Result.success();
             }

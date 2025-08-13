@@ -35,6 +35,7 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
             BaseContext.setCurrentId(userId);
             return true;
         } catch (Exception e) {
+            log.error("用户jwt令牌解析失败！");
             response.setStatus(401);
             return false;
         }
