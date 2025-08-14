@@ -136,4 +136,13 @@
         order by number desc
         limit 0,10
     </select>
+    <select id="getByBeginAndEndTime" resultType="com.sky.vo.TurnoverReportVO">
+        select DATE_FORMAT(order_time, '%Y-%m-%d') as dateList,
+               sum(amount)                         as turnoverList
+        from orders
+        where order_time between #{begin} and #{end}
+          and status = 5
+        group by DATE_FORMAT(order_time, '%Y-%m-%d')
+        order by dateList
+    </select>
 </mapper>

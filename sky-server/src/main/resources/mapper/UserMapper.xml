@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.UserMapper">
+    <resultMap id="dailyUserCountMap" type="java.util.Map">
+        <result column="dateList" property="key" javaType="java.time.LocalDate"/>
+        <result column="users" property="value" javaType="java.lang.Integer"/>
+    </resultMap>
     <select id="select" resultType="com.sky.vo.UserLoginVO">
         select *
         from user
@@ -11,4 +15,12 @@
         insert into user (openid, create_time)
         values (#{openid}, #{createTime})
     </insert>
+    <select id="getByBeginAndEndTime" resultType="map">
+        select DATE_FORMAT(create_time, '%Y-%m-%d') as dateList,
+               count(id)                            as users
+        from user
+        where create_time between #{begin} and #{end}
+        group by DATE_FORMAT(create_time, '%Y-%m-%d')
+        order by dateList
+    </select>
 </mapper>
