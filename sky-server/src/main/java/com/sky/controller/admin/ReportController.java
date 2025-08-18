@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.service.ReportService;
+import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.result.Result;
 import com.sky.vo.UserReportVO;
@@ -38,5 +39,12 @@ public class ReportController {
                                                   @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
         OrderReportVO orderReportVO = reportService.ordersStatistics(begin, end);
         return Result.success(orderReportVO);
+    }
+
+    @GetMapping("/top10")
+    public Result<SalesTop10ReportVO> top10(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+                                            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+        SalesTop10ReportVO top10 = reportService.getTop10(begin, end);
+        return Result.success(top10);
     }
 }
