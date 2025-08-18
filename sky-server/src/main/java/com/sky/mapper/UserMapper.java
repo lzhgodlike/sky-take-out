@@ -25,4 +25,12 @@ public interface UserMapper {
 
     @Select("select count(id) from user where create_time < #{begin}")
     int getTotalUntilDateByDate(LocalDate begin);
+
+    /**
+     * 根据动态条件统计用户数量
+     *
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 }
