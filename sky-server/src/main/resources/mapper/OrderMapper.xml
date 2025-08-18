@@ -145,4 +145,9 @@
         group by DATE_FORMAT(order_time, '%Y-%m-%d')
         order by dateList
     </select>
+    <select id="getByBeginAndEndTimeOne" resultType="com.sky.entity.Orders">
+        select *
+        from orders
+        where order_time between #{begin} and #{end}
+    </select>
 </mapper>

@@ -4,6 +4,7 @@ import com.sky.service.ReportService;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.result.Result;
 import com.sky.vo.UserReportVO;
+import com.sky.vo.OrderReportVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,5 +31,12 @@ public class ReportController {
                                                @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
         UserReportVO userReportVO = reportService.userStatistics(begin, end);
         return Result.success(userReportVO);
+    }
+
+    @GetMapping("/ordersStatistics")
+    public Result<OrderReportVO> ordersStatistics(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+                                                  @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+        OrderReportVO orderReportVO = reportService.ordersStatistics(begin, end);
+        return Result.success(orderReportVO);
     }
 }

@@ -101,4 +101,6 @@ public interface OrderMapper {
     List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
 
     List<TurnoverReportVO> getByBeginAndEndTime(LocalDate begin, LocalDate end);
+
+    List<Orders> getByBeginAndEndTimeOne(LocalDate begin, LocalDate end);
 }

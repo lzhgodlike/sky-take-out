@@ -4,6 +4,7 @@ import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
+import com.sky.vo.OrderReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,6 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public TurnoverReportVO turnoverStatistics(LocalDate begin, LocalDate end) {
-        log.info("查询营业额数据，从{}到{}", begin, end);
         end = end.plusDays(1);
         List<TurnoverReportVO> turnoverReportVOList = orderMapper.getByBeginAndEndTime(begin, end);
         log.info("查询结果：{}", turnoverReportVOList);
@@ -84,5 +84,40 @@ public class ReportServiceImpl implements ReportService {
         userReportVO.setNewUserList(newUserList.substring(0, newUserList.length() - 1));
         log.info("用户报表：{}", userReportVO);
         return userReportVO;
+    }
+
+    @Override
+    public OrderReportVO ordersStatistics(LocalDate begin, LocalDate end) {
+        end = end.plusDays(1);
+        List<Orders> orders = orderMapper.getByBeginAndEndTimeOne(begin, end);
+        OrderReportVO orderReportVO = new OrderReportVO();
+        StringBuilder dateList = new StringBuilder();
+        StringBuilder orderCountList = new StringBuilder();
+        StringBuilder validOrderCountList = new StringBuilder();
+//        int totalOrderCount = 0;
+        int validOrderCount = 0;
+        for (LocalDate date = begin; date.isBefore(end); date = date.plusDays(1)) {
+            Integer orderCount = 0;
+            Integer validOrderCountL = 0;
+            dateList.append(date).append(",");
+            for (Orders order : orders) {
+                if (order.getOrderTime().toLocalDate().equals(date)) {
+                    orderCount += 1;
+                    if (order.getStatus() > Orders.TO_BE_CONFIRMED && order.getStatus() <= Orders.COMPLETED && order.getPayStatus() != Orders.REFUND) {
+                        validOrderCountL += 1;
+                    }
+                }
+            }
+            validOrderCount += validOrderCountL;
+            orderCountList.append(orderCount).append(",");
+            validOrderCountList.append(validOrderCountL).append(",");
+        }
+        orderReportVO.setTotalOrderCount(orders.size());
+        orderReportVO.setDateList(dateList.substring(0, dateList.length() - 1));
+        orderReportVO.setOrderCountList(orderCountList.substring(0, orderCountList.length() - 1));
+        orderReportVO.setValidOrderCountList(validOrderCountList.substring(0, validOrderCountList.length() - 1));
+        orderReportVO.setValidOrderCount(validOrderCount);
+        orderReportVO.setOrderCompletionRate(validOrderCount * 1.0 / orders.size());
+        return orderReportVO;
     }
 }
